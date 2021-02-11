@@ -4,7 +4,6 @@ const formData = require("express-form-data");
 const mongoose = require('mongoose')
 var bodyParser = require('body-parser');
 
-
 const app = express()
 app.use(express.json())
 app.use(cors())
@@ -12,6 +11,7 @@ app.use(bodyParser.json());
 // in latest body-parser use like below.
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(formData.parse());
+app.use(express.static(__dirname + '/uploads'));
 
 const port = process.env.PORT || 5000
 
