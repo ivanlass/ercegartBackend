@@ -1,42 +1,45 @@
 const router = require('express').Router()
 const fs = require('fs')
 const multer = require('multer')
-const upload = require('../multer')
+const upload = multer({ dest: './uploads/' })
 const cloudinary = require('../cloudinary')
-
-
-const storage = multer.diskStorage({
-    destination: function(req, file, callback) {
-      callback(null, '/uploads');
-    },
-    filename: function (req, file, callback) {
-      callback(null, file.fieldname);
-    }
-  });
-
+const Products = require('../models/Product.model')
 
 
 router.route('/add', upload.array('image')).post(async(req, res) => {
+  const imgs = req.files.image
+  const {name, materijali, opis, kategorija} = req.body
 
-    console.log(req.files.image[0])
+  console.log(kategorija)
+  const urls =[]
+  const uploader = async(path) => await cloudinary.uploads(path, 'images')
 
 
+   for(const img of imgs) {
+    fs.readFile(img.path, function (err, data) {
+          fs.writeFile(img.originalFilename, data, async function (err) {
+            const newPath = await uploader(img.path)
+                urls.push(newPath.secure_url)
+                
+              });
+            });
+          }
+          
 
-    // const uploader = async(path) => await cloudinary.uploads(path, 'images')
-    // const urls =[]
-    // const files = req.files.image
-    // for(const file of files) {
-    //     const {path} = file
-    //     const newPath = await uploader(path)
-    //     urls.push(newPath)
-    //     fs.unlinkSync(path)
+setTimeout(() => {
+  console.log(urls)
+  const newProduct = new Products({ name, materijali, kategorija, slike:urls, opis })
+    newProduct.save()
+        .then(() => {
+            Products.find()
+                .then(products => {
+                    res.json(products)
+                })
+        })
+        .catch(err => res.status(400).json('Error' + err))
+}, 5000);
 
-    // }
 
-    // setTimeout(() => {
-    //     console.log(urls)
-    // }, 5000);
-    // res.status(200).json({message:"valjaa "})
 })
 
 
