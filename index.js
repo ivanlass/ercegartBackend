@@ -31,7 +31,7 @@ connection.once('open', () => {
 
 
 
-const uploadProduct = require('./routes/UploadProduct.router')
+const uploadProduct = require('./routes/Product.router')
 
 
 app.use('/products', uploadProduct)
