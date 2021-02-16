@@ -70,18 +70,6 @@ router.route('/delete').post((req, res) => {
 
 
 
-// router.route('/delete').post((req, res) => {
-//   Products.findByIdAndDelete(req.body.query)
-//       .then(product => {
-//         Products.find()
-//           .then(product => {
-//             console.log(product)
-//             res.json(product)
-//       })
-//       .catch(err => res.status(400).json('Error:' + err))
-//       })
-//       .catch(err => res.status(400).json('Error:' + err))
-// })
 
 
 
@@ -93,7 +81,7 @@ router.route('/delete').post((req, res) => {
 
 router.route('/add', upload.array('image')).post(async(req, res) => {
   const imgs = req.files.image
-  const {name, materijali, opis, kategorija} = req.body
+  const {name, materijali, opis, kategorija, nameEn, materijaliEn, opisEn} = req.body
 
   console.log(kategorija)
   const urls =[]
@@ -113,7 +101,11 @@ router.route('/add', upload.array('image')).post(async(req, res) => {
 
 setTimeout(() => {
   console.log(urls)
-  const newProduct = new Products({ name, materijali, kategorija, slike:urls, opis })
+  const newProduct = new Products({ name:{hr:name, en:nameEn}, 
+                                    materijali:{hr:materijali, en: materijaliEn}, 
+                                    kategorija, 
+                                    slike:urls, 
+                                    opis: {hr: opis, en: opisEn} })
     newProduct.save()
         .then(() => {
             Products.find()

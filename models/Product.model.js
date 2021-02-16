@@ -3,15 +3,15 @@ const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
 const productSchema = new Schema({
-    name: { type: String, required: false },
+    name: { type: Object, required: false },
 
-    materijali: { type: String, required: true },
+    materijali: { type: Object, required: true },
 
     kategorija: { type: String, required: true },
 
     slike: { type: Array, required: true },
 
-    opis: { type: String, required: true },
+    opis: { type: Object, required: true },
 
 
 }, {
