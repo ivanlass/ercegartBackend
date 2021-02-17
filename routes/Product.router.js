@@ -6,7 +6,14 @@ const cloudinary = require('../cloudinary')
 const Products = require('../models/Product.model')
 const cloudinar = require('cloudinary')
 
-
+router.route('/test').post((req, res) => {
+  Products.find()
+      .then(product => {
+        console.log(product)
+        res.json(product)
+      })
+      .catch(err => res.status(400).json('Error:' + err))
+})
 
 
 router.route('/').post((req, res) => {
